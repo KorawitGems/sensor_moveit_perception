@@ -1,0 +1,74 @@
+<?xml version="1.0" ?>
+<robot name="rgbd_camera" xmlns:xacro="http://ros.org/wiki/xacro">
+
+  <xacro:include filename="$(find sensor_moveit_perception)/urdf/rgbd_camera.gazebo.xacro" />
+  <xacro:include filename="$(find sensor_moveit_perception)/urdf/camera_common.xacro" />
+
+  <xacro:macro name="rgbd_camera_urdf" params="parent *origin namespace:=rgbd camera_name:=camera">
+
+    <joint name="${namespace}_${camera_name}_base_joint" type="fixed">
+      <parent link="${parent}"/>
+      <child link="${namespace}_${camera_name}_link"/>
+      <xacro:insert_block name="origin" />
+    </joint>
+
+    <link name="${namespace}_${camera_name}_link">
+      <inertial>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <mass value="0.42"/>
+        <xacro:box_inertia x="0.022" y="0.141" z="0.031" m="0.42" />
+      </inertial>
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <box size="0.022 0.141 0.031"/>
+        </geometry>
+        <material name="blue_black" />
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <box size="0.022 0.141 0.031"/>
+        </geometry>
+      </collision>
+    </link>
+
+    <joint name="${namespace}_${camera_name}_color_joint" type="fixed">
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <parent link="${namespace}_${camera_name}_link"/>
+      <child link="${namespace}_${camera_name}_color_frame"/>
+    </joint>
+    <link name="${namespace}_${camera_name}_color_frame"/>
+
+    <joint name="${namespace}_${camera_name}_color_optical_joint" type="fixed">
+      <origin xyz="0 0 0" rpy="-1.57 0 -1.57"/>
+      <parent link="${namespace}_${camera_name}_color_frame"/>
+      <child link="${namespace}_${camera_name}_color_optical_frame"/>
+    </joint>
+    <link name="${namespace}_${camera_name}_color_optical_frame"/>
+
+    <joint name="${namespace}_${camera_name}_depth_joint" type="fixed">
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <parent link="${namespace}_${camera_name}_link"/>
+      <child link="${namespace}_${camera_name}_depth_frame"/>
+    </joint>
+    <link name="${namespace}_${camera_name}_depth_frame"/>
+
+    <joint name="${namespace}_${camera_name}_depth_optical_joint" type="fixed">
+      <origin xyz="0 0 0" rpy="-1.57 0 -1.57"/>
+      <parent link="${namespace}_${camera_name}_depth_frame"/>
+      <child link="${namespace}_${camera_name}_depth_optical_frame"/>
+    </joint>
+    <link name="${namespace}_${camera_name}_depth_optical_frame"/>
+
+    <xacro:rgbd_camera_gazebo 
+      namespace="${namespace}"
+      camera_name="${camera_name}" 
+      camera_link="${namespace}_${camera_name}_link" 
+      camera_depth_frame="${namespace}_${camera_name}_depth_frame" 
+      camera_depth_optical_frame="${namespace}_${camera_name}_depth_optical_frame" 
+    />
+
+  </xacro:macro>
+
+</robot>

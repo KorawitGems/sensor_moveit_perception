@@ -1,0 +1,24 @@
+<?xml version="1.0" ?>
+<robot name="rgbd_camera_world" xmlns:xacro="http://ros.org/wiki/xacro">
+
+  <!-- parameters -->
+  <xacro:arg name="namespace" default="rgbd"/>
+  <xacro:arg name="x" default="3.0" />
+  <xacro:arg name="y" default="0.0" />
+  <xacro:arg name="z" default="0.5" />
+  <xacro:arg name="roll" default="0.0" />
+  <xacro:arg name="pitch" default="0.0" />
+  <xacro:arg name="yaw" default="3.14159"/>
+  
+  <xacro:include filename="$(find sensor_moveit_perception)/urdf/rgbd_camera_macro.xacro" />
+  
+  <xacro:rgbd_camera_urdf 
+    parent="world" 
+    namespace="$(arg namespace)" 
+    camera_name="camera">
+      <origin xyz="$(arg x) $(arg y) $(arg z)" rpy="$(arg roll) $(arg pitch) $(arg yaw)"/>
+  </xacro:rgbd_camera_urdf>
+
+  <link name="world"/>
+
+</robot>
